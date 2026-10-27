@@ -103,10 +103,10 @@ class ClientTests(unittest.TestCase):
             s.fetch(START)
         self.assertEqual(session.get.call_count, 1)
 
-    def test_plain_request_no_extra_parameters(self):
+    def test_request_uses_indian_residential_proxies(self):
         s, session = self.scraper(FakeResponse(200, LISTING))
         s.fetch(START)
-        self.assertEqual(session.get.call_args.kwargs["params"], {"token": "t", "url": START})
+        self.assertEqual(session.get.call_args.kwargs["params"], {"token": "t", "url": START, "super": "true", "geoCode": "in"})
 
     def test_category_walk_dedupes(self):
         s, session = self.scraper(*[FakeResponse(200, LISTING)] * 3)
