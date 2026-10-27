@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zepto-scraper"
-version = "0.1.0"
+version = "0.1.1"
 description = "Scrape Zepto category listings (price, MRP, discount, stock) and product details (seller, shelf life, FSSAI licence) with Python."
 readme = "README.md"
 requires-python = ">=3.8"

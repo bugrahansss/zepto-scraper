@@ -23,11 +23,12 @@ Zepto sits behind AWS WAF on CloudFront:
 | --- | --- | --- |
 | `requests`, default user agent | 429 | 0 bytes |
 | `requests`, Chrome user agent | 202, `x-amzn-waf-action: challenge` | 0 bytes |
-| Through Scrape.do, no parameters | 200 | full page |
+| Through Scrape.do, no parameters | 502 after ~60 s (`ROTATION_FAILED`, not charged) | none |
+| Through Scrape.do, `super=true&geoCode=in` | 200 in ~3 s | full page |
 
 **Watch the 202.** It means "Accepted", so `raise_for_status()` treats it as success and a scraper that only checks for errors writes empty pages without a single failure. This package treats anything but a 200 as an error.
 
-Pages are fetched through the [Scrape.do](https://scrape.do/?utm_source=github&utm_medium=readme&utm_campaign=zepto-scraper) API with a plain request: no `render`, no `super`, no `geoCode`, 1 credit per page. You need a Scrape.do API token; the free plan includes 1,000 credits a month.
+Pages are fetched through the [Scrape.do](https://scrape.do/?utm_source=github&utm_medium=readme&utm_campaign=zepto-scraper) API through residential proxies in India (`super=true&geoCode=in`), no `render`: 10 credits per page. You need a Scrape.do API token; the free plan includes 1,000 credits a month (about 100 Zepto pages).
 
 ## Quick start
 
