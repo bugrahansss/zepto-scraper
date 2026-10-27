@@ -5,7 +5,9 @@ with a browser user agent it gets HTTP 202, an empty body and
 ``x-amzn-waf-action: challenge``. 202 counts as success to
 ``raise_for_status()``, so this client checks for ``status_code != 200``.
 
-Through Scrape.do a plain request (no parameters, 1 credit) returns the full page.
+Zepto's WAF also blocks Scrape.do's default rotation (502 ROTATION_FAILED after
+about a minute), so every page goes through residential proxies in India
+(``super=true&geoCode=in``, 10 credits, about 3 seconds).
 """
 
 from __future__ import annotations
@@ -20,6 +22,7 @@ from .parser import ZEPTO, parse_listing, parse_product, subcategory_paths
 
 API_URL = "https://api.scrape.do/"
 TOKEN_ENV = "SCRAPEDO_TOKEN"
+PROXY_PARAMS = {"super": "true", "geoCode": "in"}
 
 
 class ScrapeError(RuntimeError):
@@ -53,7 +56,7 @@ class ZeptoScraper:
 
     def fetch(self, url: str) -> str:
         """Return the raw HTML of ``url``. Anything but a 200 is an error."""
-        params = {"token": self.token, "url": url}
+        params = {"token": self.token, "url": url, **PROXY_PARAMS}
         last_error: Optional[ScrapeError] = None
         for attempt in range(self.retries + 1):
             try:
